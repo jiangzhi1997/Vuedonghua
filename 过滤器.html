@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <ul>
+            <li v-for="(item,index) in goods">
+                <span v-if="index%2==0">
+                    {{item.pubDate | filterPubDate()}}
+                </span>
+                <span v-else>
+                    {{item.pubDate | filterPubDate|pubDate}}
+                </span>
+                <span>
+                    {{total|total(item)}}
+                </span>
+            </li>
+        </ul>
+    </div>
+</body>
+</html>
+<script>
+    new Vue({
+        el:'#app',
+        data:{
+            total:0,
+            goods:[
+                {name:'iphon',pubDate: 1544517895399,price:8000,num:2},
+                {name:'xiaomi',pubDate: 1540517890000,price:3000,num:3},
+                {name:'huwei',pubDate: 1540510890000,price:5000,num:4}
+            ]
+        },
+        filters:{
+            filterPubDate(value){
+                // var date=new Date().getTime(); //当前时间戳(秒数)
+                // console.log(date)
+                var date = new Date(value);
+                return(date.getMonth()+1)+'-'+date.getDate()
+            },
+            pubDate(value){
+                console.log(value);
+                return value.split("-").join("/")
+            },
+            total(value,item){
+                return item.price*item.num;
+            }
+        }
+    })
+</script>

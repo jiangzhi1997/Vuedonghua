@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <input type="text" v-model="searchValue">
+        <br/>
+        <span v-search={searchValue:searchValue,searchText:searchText}>{{searchText}}</span>
+    </div>
+</body>
+</html>
+<script>
+    Vue.directive('search',{
+        componentUpdated(el,binding){
+            console.log("组件的所有虚拟节点都已更新");
+            var searchValue=binding.value.searchValue;  //获取输入的搜索值
+            
+            var searchText=binding.value.searchText;    //搜索原文本内容
+            
+            var index= searchText.indexOf(searchValue); //判断输入的内容是否存在原内容中的存在,如果存在则继续,否则就无需继续计算
+            
+            /*
+                输入的内容长度要大于0,
+                并且要在字符串中涨到该串
+            */
+            
+            if(searchValue.length>0&&index!=-1){
+                console.log("测试")
+                /*
+                    将输入的内容作为拆分符号,将原内容拆分成数组
+                */
+                var contents = searchText.split(searchValue);
+                //输入的内容用一个span标签包括起来,并设置该span变迁的字体颜色为红色
+                var inHTML= `
+                    <span style = "color:red">${searchValue}</span>
+                `
+                /*
+                        用得chuangk的inHTML来凭借拆分出来的字符串,重新组成一个的字符串
+                */
+                searchText= contents.join(inHTML);
+            }
+            el.innerHTML=searchText;
+        }
+    })
+    new Vue({
+        el:'#app',
+        data:{
+            searchValue:'',
+            searchText:"Hello World"
+        }
+    })
+</script>
